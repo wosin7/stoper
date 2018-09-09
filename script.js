@@ -1,9 +1,11 @@
 class Stopwatch {
-    constructor(display) {
+    constructor(display, res) {
         this.running = false;
         this.display = display;
         this.reset();
         this.print(this.times);
+       // this.save();
+        this.timeList = res;
     }
 
     reset() {
@@ -42,6 +44,14 @@ class Stopwatch {
     stop() {
         this.running = false;
         clearInterval(this.watch);
+        
+    }
+    save(){
+        this.timeList.innerHTML += this.format(this.times);
+        this.timeList.innerHTML += "<br />"
+    }
+    clear(){
+        this.timeList.innerHTML = "";
     }
 format(times) {
     return `${pad0(times.minutes)}:${pad0(times.seconds)}:${pad0(Math.floor(times.miliseconds))}`;
@@ -49,7 +59,9 @@ format(times) {
 }
 
 const stopwatch = new Stopwatch(
-document.querySelector('.stopwatch'));
+document.querySelector('.stopwatch'), document.querySelector('.times'));
+
+const timeList = document.querySelector('.times');
 
 let startButton = document.getElementById('start');
 startButton.addEventListener('click', () => stopwatch.start());
@@ -59,6 +71,12 @@ stopButton.addEventListener('click', () => stopwatch.stop());
 
 let resetButton = document.getElementById('reset');
 resetButton.addEventListener('click', () => stopwatch.reset());
+
+let saveButton = document.getElementById('save');
+saveButton.addEventListener('click', () => stopwatch.save());
+
+let clearButton = document.getElementById('clear');
+clearButton.addEventListener('click', () => stopwatch.clear());
 
 function pad0(value) {
     let result = value.toString();
